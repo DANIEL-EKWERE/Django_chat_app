@@ -6,16 +6,64 @@
 
 
   <div class="container">
-    <h5 class="alert alert-info">Log In</h5>
-    <div class="btn btn-light d-flex justify-content-between" style="padding: 34px 30%;">
-        
-        <form method="post">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit" class="btn btn-primary btn-lg btn-block">Log In</button>
-        </form>
+    <div class="parent">
+      <div class="child">
+          <h1>Log In</h1>
+          <form action="" method="POST">
+              {% csrf_token %}
+              <label for="">Username</label><br>
+              <input type="text" placeholder="Username" name="username" required><br>
+              <label for="">Password</label><br>
+              <input type="text" placeholder="Password" name="password" required><br>
+              <center><button type="submit">Submit</button></center><br>
+          </form>
       </div>
+  </div>
 </div>  
 
+<style>
 
+
+.parent {
+    background-color: #DAAD86;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 130%;
+}
+
+.child {
+    display: flex;
+    background-color: #659DBD;
+    height: 80vh;
+    width: 100%;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 100px;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid dodgerblue;
+    width: 100%;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #DAAD86;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    padding: 15px;
+    transition: 0.8s;
+}
+</style>
 {% endblock %}

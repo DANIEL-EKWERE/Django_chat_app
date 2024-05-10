@@ -5,61 +5,239 @@
 {% block content %}
 {% if user.is_authenticated %}
 
+<center><a href="/logout/">
+    <button type="button" class="btn btn-light" style="background-color: white; padding: 10px;margin-bottom: 20px; color: #DAAD86;border: none; border-radius: 5px; text-decoration: none;" class="btn btn-light">Click to Log Out</button>
+  </a></center>
+
+
+<div class="parent">
   
+  <div class="child-2">
+      <center><h2>Chats</h2></center><hr>
+      <div class="chat-body-parent">
+          <div class="chat-body" id="tasks">
+              <div class="message" id="chatbox">
+                <!-- received messages and displayed here -->
+                 {% for i in messages %}
+                      {% if i.user.username != request.user.username %}
+                    <div class="receive">
+                        <p style="color: #000;">{{i.content}}<strong> -{{i.user.username}}</strong></p>
+                    </div>
+                      {% else %}
+                          <div class="send">
+                              <p style="color: #000;">{{i.content}}</p>
+                          </div>
+                      {% endif %}
+                  {% endfor %}
+              <!-- end receive messages -->
+              
+              <!-- messages sent from user are displayed here -->
+             <!----      <div class="send">
+                        <p style="color: #000;"></p>
+                    </div> -->
+               <!-- end sent messages  -->
+              </div>
 
-
-  <div class="container">
-    <div class="row d-flex justify-content-center">
-        <div class="col-12">
-            <div class="alert alert-info d-flex justify-content-between" role="alert">
-              <h5>ROOM :- {{room_name}}</h5>
-              <a href="/accounts/logout/">
-                <button type="button" class="btn btn-light">Click to Log Out</button>
-              </a>
-            </div>
-            <form>
-                <div class="form-group">
-                  {% if messages %}
-                  <div class="jumbotron" id="chatbox" style="padding: 4px 2px;max-height: 300px;  /* Adjust the max-height as needed */
-                  overflow-y: scroll;
-                "">
-                    
-                      {% for message in messages %}
-                        <div class="chat-message {% if message.user == request.user %}text-right{% else %}text-left{% endif %}">
-                          <b>{{ message.user.username }}</b> : {{ message.content }}<br>
-                        </div>
-                        {% endfor %}
-                    
-                    
-                  </div>
-                  {% else %}
-                  <div class="jumbotron" id="chatbox" style="padding: 4px 2px;"></div>
-                  <b>No Messages in this Room.</b>
-                    {% endif %}
-
-                </div>
-                <br/>
-                <div class="form-group" style="width: 100%;">
-                    <input class="form-control" placeholder="Enter text here" id="my_input" type="text" required></br>
-                </div>
-                <br/>
-                <input class="btn btn-primary btn-lg btn-block" id="submit_button" type="button" value="Send">
-            </form>
-        </div>
-    </div>
+              <div class="form">
+                  <form action="" id="messages" method="POST">
+                     {% csrf_token %}
+                      <textarea id="my_input" cols="30" rows="10" name="message" placeholder="Enter your message" required></textarea>
+                      <button class="submit" id="submit_button" type="submit">Send</button>
+                  </form>    
+              </div>
+          </div>
+      </div>
+  </div>
 </div>
 {{slug|json_script:"room_slug"}}
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    }
+
+
+    .parent {
+      background-color: #DAAD86;
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #659DBD;
+        padding: 10px;
+    }
+
+    nav ul li {
+        list-style: none;
+        display: inline-block;
+        padding: 10px;
+    }
+
+    nav ul li:hover {
+        background-color: dodgerblue;
+        color: #fff;
+        transition: 0.8s;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .parent {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        /* background-image: url("/static/img/bck.jpg");  */
+       
+        background-position: center; 
+        background-repeat: no-repeat; 
+        background-size: cover; 
+        align-items: center;
+        width: 100%;
+    }
+
+    .child-1 {
+        /* height: 70vh; */
+        width: 30%;
+        margin: 10px;
+        border-radius: 10px;
+        
+        background-color: white;
+    }
+
+    .chat-room {
+        width: 100%;
+        /* max-height: ; */
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        background-color: #fff;
+        border: 1px solid dodgerblue;
+    }
+
+    .profile-pic {
+        /* height: 80px; */
+        width: 15%;
+        
+        border-radius: 50px;
+        background-color: #fff;
+    }
+
+    .profile-pic img {
+        width:100%;
+        height:100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .chat-room h3 {
+        color: #000;
+    }
+
+    .chat-room h3 {
+        background-color: gray;
+        padding: 10px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .chat-room h3 a {
+        text-decoration: none;
+        color: white;
+    }
+
+
+    .child-2 {
+        /* max-height: 100vh; */
+        width: 80%;
+        margin: 10px;
+        border-radius: 10px;
+        padding: 10px;
+        background-color: #FBEEC1;
+    }
+
+    .chat-body-parent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* height: 60vh; */
+    }
+
+    .chat-body, .message {
+        /* max-height: 100vh; */
+        width: 100%;
+        background-color: #659DBD;
+        border-radius: 10px;
+        display: flex;      
+        padding: 10px;
+        flex-direction: column;
+    }
+
+    .chat-body .message .receive, .send {
+        background-color: #DAAD86;
+        max-width: 400px;
+       
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .send:hover {
+        padding: 15px;
+        transition: 0.8s;
+    }
+
+    .receive:hover {
+        padding: 15px;
+        transition: 0.8s;
+    }
+
+    .chat-body .message .send {
+        align-self: flex-end;
+    }
+
+    .chat-body .message .receive {
+        align-self: flex-start;
+    }
+
+    form {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    form textarea {
+        width: 70%;
+        height: 40px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    form button {
+        width: 25%;
+        padding: 10px;
+        background-color: #DAAD86;
+        border-radius: 5px;
+        border: none;
+        color: #fff;
+    }
+</style>
 <script>
 
 const chatbox = document.querySelector("#chatbox");
 
   // Function to scroll to the bottom of the chatbox
-  function scrollToBottom() {
-    chatbox.scrollTop = chatbox.scrollHeight;
-  }
+  // function scrollToBottom() {
+  //   chatbox.scrollTop = chatbox.scrollHeight;
+  // }
 
-  // Scroll to bottom when the page is loaded
-  scrollToBottom();
+  // // Scroll to bottom when the page is loaded
+  // scrollToBottom();
 
  
     const roomName= JSON.parse(document.getElementById('room_slug').textContent);
@@ -97,11 +275,16 @@ const chatbox = document.querySelector("#chatbox");
         }
       
     };
-
     chatSocket.onmessage = function (e) {
+
       const data = JSON.parse(e.data);
       var div = document.createElement("div");
       div.innerHTML = "<b>" + data.username + "</b> : " + data.message;
+        div.style.backgroundColor = '#DAAD86';
+        div.style.maxWidth = '400px';
+        div.style.borderRadius = '10px';
+        div.style.padding = '10px';
+        div.style.marginBottom = '10px';
 
       // Add class based on user authentication
       if (data.username === "{{ request.user.username }}") {
@@ -114,6 +297,43 @@ const chatbox = document.querySelector("#chatbox");
       document.querySelector("#chatbox").appendChild(div);
       scrollToBottom();
     };
+
+
+
+    // send notification here
+
+            fcm_api = "AAAAaTsSHnI:APA91bEnZZqvRVx5qQQMD2fTHU4BMoTmFdShcQUpQJTgvBZax5uokUHxG8MyqMMTznBve1ZapAH-0Cd-v0zHNHrLiIsMHkWfdPGiUPfvPaKajnLaJkdJ8ktP3KB5kXEuLhZ2YCYhGxwk"
+                url = "https://fcm.googleapis.com/fcm/send"
+                
+                headers = {
+                    "Content-Type": "application/json",
+                    "Authorization": 'key=' + fcm_api
+                }
+
+                payload = {
+                    "registration_ids": ['dnEetf_WJIGJpt_B8Xhlz9:APA91bGXIBI93qq4mjUsy6BZS7ROToZ-TLfpRwLkMd1icdkjr2sRu08N-oSwW8xI1KM13Xa7FzoI5C9iYeaMOEnPdc15gvJ4AoD1bdGOJnt-BFznQcmYgDoFjKHDmsWjIIbioVc3MbQU','cnwQQ0aErqYJq_p5hhbsNr:APA91bG6dh8t-_h8IL7F9scrJVNXCNaAK2XFcZ6A4I2o0ZAC-YoTC1QmT2wd-ivhkN2W59EcIMtWjYmSIPljM5QFfYQg1eObpFqLgck1zKHqK1AdQH46jqdTUyCwb9GnZc2sW4viaGy8'],
+                    "priority": "high",
+                    "notification": {
+                        "body": '{{ request.user.username }} sent a message',
+                        "title": '{{ request.user.username }}',
+                        "image": "https://i.ytimg.com/vi/m5WUPHRgdOA/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLDwz-yjKEdwxvKjwMANGk5BedCOXQ",
+                        "icon": "https://yt3.ggpht.com/ytc/AKedOLSMvoy4DeAVkMSAuiuaBdIGKC7a5Ib75bKzKO3jHg=s900-c-k-c0x00ffffff-no-rj"
+                    }
+                }
+            try{
+                const response = fetch(url,{method:'POST',headers:headers,body:JSON.stringify(payload)});
+            if(!response.ok){
+                throw new Error('netwok response was not ok')
+            }
+            const responseData = response.json();
+            console.log('successs:',responseData)
+
+            } catch (error){
+                console.log('Error:',error)
+                throw error;
+            }
+            
+
   </script>
 
 
@@ -122,14 +342,12 @@ const chatbox = document.querySelector("#chatbox");
 <div class="container">
     <div class="alert alert-info d-flex justify-content-between" role="alert">
         <h5>You are not logged in</h5>
-        <a href="/accounts/logout/">
           <button type="button" class="btn btn-light"><a href="{% url 'login' %}">Log In</a></button>
-        </a>
       </div>
 </div>  
 {% endif %}
 
-<br/>
+
 
     
 

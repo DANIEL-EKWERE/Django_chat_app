@@ -1,18 +1,83 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Home{% endblock %}
 
+{% block header %}
+<link rel="stylesheet" href="{% static 'style.css'  %}">
+{% endblock %}
+<head>
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-messaging.js"></script>
+    <!-- <script src="/static/js/firebase-messaging-sw.js"></script>
+
+     -->
 
 
+
+     <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCsD2tYq9epLFIv5Rr5uSF0mrIMsOmoqus",
+        authDomain: "fir-chat-app-with-django.firebaseapp.com",
+        projectId: "fir-chat-app-with-django",
+        storageBucket: "fir-chat-app-with-django.appspot.com",
+        messagingSenderId: "451962609266",
+        appId: "1:451962609266:web:ffc3ba15ef95aa2060eceb",
+        measurementId: "G-YDDHCBDGY2"
+      };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+      
+        const messaging = firebase.messaging();
+        console.log(messaging.getToken())
+        messaging.getToken({ vapidKey: 'BA9zMgmbs3oiZmRHrtcILc985E9PAp3XLQ4AodpseVjPsRv944JeHpZP4pxNZ1Cew-KjnhpQmWemtnF6dPIJNMk' }).then((currentToken) => {
+        if (currentToken) {
+          
+          console.log(currentToken)
+        } else {
+          console.log('No registration token available. Request permission to generate one.');
+       
+        }
+      }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+      });
+      
+      
+        messaging
+         .requestPermission()
+         .then(function () {
+           console.log("Notification permission granted.");
+           return messaging.getToken()
+         })
+         .catch(function (err) {
+         console.log("Unable to get permission to notify.", err);
+       });
+      
+      
+        messaging.onMessage((payload) => {
+        console.log('Message received. ', payload);
+       
+      });
+      
+      
+      
+      </script>
+
+    
+  </head>
+</head>
 {% block content %}
 {% if user.is_authenticated %}
 
   <div class="container">
     <div class="alert alert-info d-flex justify-content-between" role="alert">
-        <h5>Available Public Rooms</h5>
-        <a href="/accounts/logout/">
-          <button type="button" class="btn btn-light">Click to Log Out</button>
+        <center>
+          <h5 style="padding: 10px 0px;">Available Public Rooms</h5>
+        <a href="/logout/">
+          <button type="button" class="btn btn-light" style="background-color: white; padding: 10px; color: #DAAD86;border: none; border-radius: 5px; text-decoration: none;" class="btn btn-light">Click to Log Out</button>
         </a>
+        </center>
       </div>
       
       
@@ -20,12 +85,12 @@
         <div class="row equal">
             {% for room in rooms %}
             
-            <div class="col-sm-4 d-flex pb-3">
-                <div class="card bg-light mb-3" style="max-width: 18rem;">
-                    <div class="card-block">
+            <div class="chat-body" style="margin: 2rem;">
+                <div class="chat-body" style="max-width: 18rem;">
+                    <div class="chat-body">
                         <h3 class="card-title">{{room.name}}</h3>
-                        <p class="card-text">It is Public group for this Project.</p>
-                        <a href="/{{room.slug}}" class="btn btn-outline-secondary">Go to Room</a>
+                        <p class="card-text" style="padding: 10px 0px;">It is Public group for this Project.</p>
+                        <a href="/{{room.slug}}" class="btn btn-outline-secondary"><button style="background-color: #DAAD86; padding: 10px; color: white;border: none; border-radius: 5px; text-decoration: none;">Go To Room</button></a>
                     </div>
                 </div>
             </div>
@@ -42,21 +107,212 @@
 
 
 {% else %}
-<div class="container">
+<div class="container" style="background-color: #DAAD86;">
     <div class="alert alert-info d-flex justify-content-between" role="alert">
         <h5>You are not logged in</h5>
-        <a href="/accounts/logout/">
-          <button type="button" class="btn btn-light"><a href="{% url 'login' %}">Log In</a></button>
+        <a href="/login/" style="text-decoration: none; list-style-type: none;">
+          <center><button type="button" style="background-color: white; padding: 10px; color: #DAAD86;border: none; border-radius: 5px; text-decoration: none;" class="btn btn-light"><a href="{% url 'login' %}" style="text-decoration: none; color: #DAAD86;">Log In</a></button></center>
         </a>
       </div>
 </div>  
 {% endif %}
-
-<br/>
-
-    
-
-
-
-
 {% endblock %}
+
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    }
+
+
+    .container {
+      background-color: #DAAD86;
+      width: 100%;
+      height: 100%;
+    }
+
+button {
+    background-color: #DAAD86;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    padding: 15px;
+    transition: 0.8s;
+}
+
+
+    .parent {
+      background-color: #DAAD86;
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #659DBD;
+        padding: 10px;
+    }
+
+    nav ul li {
+        list-style: none;
+        display: inline-block;
+        padding: 10px;
+    }
+
+    nav ul li:hover {
+        background-color: dodgerblue;
+        color: #fff;
+        transition: 0.8s;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .parent {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        /* background-image: url("/static/img/bck.jpg");  */
+       
+        background-position: center; 
+        background-repeat: no-repeat; 
+        background-size: cover; 
+        align-items: center;
+        width: 100%;
+    }
+
+    .child-1 {
+        /* height: 70vh; */
+        width: 30%;
+        margin: 10px;
+        border-radius: 10px;
+        
+        background-color: white;
+    }
+
+    .chat-room {
+        width: 100%;
+        /* max-height: ; */
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        background-color: #fff;
+        border: 1px solid dodgerblue;
+    }
+
+    .profile-pic {
+        /* height: 80px; */
+        width: 15%;
+        
+        border-radius: 50px;
+        background-color: #fff;
+    }
+
+    .profile-pic img {
+        width:100%;
+        height:100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .chat-room h3 {
+        color: #000;
+    }
+
+    .chat-room h3 {
+        background-color: gray;
+        padding: 10px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .chat-room h3 a {
+        text-decoration: none;
+        color: white;
+    }
+
+
+    .child-2 {
+        /* max-height: 100vh; */
+        width: 50%;
+        margin: 10px;
+        border-radius: 10px;
+        padding: 10px;
+        background-color: #FBEEC1;
+    }
+
+    .chat-body-parent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* height: 60vh; */
+    }
+
+    .chat-body, .message {
+        /* max-height: 100vh; */
+        width: 100%;
+        background-color: #659DBD;
+        border-radius: 10px;
+        display: flex;      
+        padding: 10px;
+        margin: 2rem;
+        flex-direction: column;
+    }
+
+    .chat-body .message .receive, .send {
+        background-color: #DAAD86;
+        max-width: 400px;
+       
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .send:hover {
+        padding: 15px;
+        transition: 0.8s;
+    }
+
+    .receive:hover {
+        padding: 15px;
+        transition: 0.8s;
+    }
+
+    .chat-body .message .send {
+        align-self: flex-end;
+    }
+
+    .chat-body .message .receive {
+        align-self: flex-start;
+    }
+
+    form {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    form textarea {
+        width: 70%;
+        height: 40px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    form button {
+        width: 25%;
+        padding: 10px;
+        background-color: #DAAD86;
+        border-radius: 5px;
+        border: none;
+        color: #fff;
+    }
+</style>

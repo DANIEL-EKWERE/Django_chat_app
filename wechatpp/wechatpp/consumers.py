@@ -7,6 +7,8 @@ from chatapp.models import Room,Message,User
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_slug']
+        print(f'{self.room_name} room name here')
+        # print(self.scope.get('headers',{}).get(b'authorization',b''))
         self.roomGroupName = 'chat_%s' % self.room_name
         
         await self.channel_layer.group_add(
